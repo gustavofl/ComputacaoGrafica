@@ -5,10 +5,6 @@ from OpenGL.GLU import *
 from OpenGL.GLUT import *
 import time, sys
 
-# Some api in the chain is translating the keystrokes to this octal string
-# so instead of saying: ESCAPE = 27, we use the following.
-ESCAPE = '\033'
-
 def init():
 	glClearColor(0.0,0.0,0.0,0.0)
 
@@ -101,6 +97,8 @@ def keyboard_CommomKeys(key, x, y):
 		sys.exit()
 	if(key == chr(115)): # s
 		girarCenario()
+	if(key == chr(113)): # q
+		show_mouse()
 	glutPostRedisplay();
 
 # Funcao de tratamento de teclado (teclas especiais)
@@ -119,6 +117,35 @@ def keyboard_SpecialKeys(key, x, y):
 		ponto_visao[0] += tam_passo
 	glutPostRedisplay();
 
+def movimentacao_mouse(x, y):
+	if(is_mouse_hidden):
+		if(x > 600):
+			glutWarpPointer( x-500 , y )
+		elif(x<100):
+			glutWarpPointer( x+500 , y )
+		if(y > 600):
+			glutWarpPointer( x , y-500 )
+		elif(y<100):
+			glutWarpPointer( x , y+500 )
+	glutPostRedisplay();
+
+def clique_mouse(button, state, x, y):
+	if(button == GLUT_LEFT_BUTTON and state == GLUT_DOWN):
+		hide_mouse()
+	glutPostRedisplay();
+
+def hide_mouse():
+	global is_mouse_hidden
+
+	glutSetCursor(GLUT_CURSOR_NONE)
+	is_mouse_hidden = True
+
+def show_mouse():
+	global is_mouse_hidden
+
+	glutSetCursor(GLUT_CURSOR_INHERIT)
+	is_mouse_hidden = False
+
 def main():
 	glutInit(sys.argv)
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH)
@@ -129,6 +156,8 @@ def main():
 	glutDisplayFunc(display)
 	glutKeyboardFunc(keyboard_CommomKeys)
 	glutSpecialFunc(keyboard_SpecialKeys)
+	glutMouseFunc(clique_mouse)
+	glutPassiveMotionFunc(movimentacao_mouse)
 	glutIdleFunc(display)
 	glutMainLoop()
 
@@ -136,5 +165,6 @@ spin = 0.0
 tam_passo = 0.5
 posicao = [0,0,5]
 ponto_visao = [0,5,5]
+is_mouse_hidden = False
 
 main()
