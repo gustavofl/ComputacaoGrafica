@@ -90,6 +90,9 @@ def display():
 
 	depth()
 
+	# analisar as teclas pressionadas no teclado e realizar alguma acao
+	operacoes_teclado()
+
 	configurar_camera()
 	
 	glutSwapBuffers()
@@ -158,20 +161,10 @@ def girarCenario():
 	glutPostRedisplay()
 
 # Funcao de tratamento de teclado (teclas comuns)
-def keyboard_CommomKeys(key, x, y):
-	# print(ord(key))
-	if(key == chr(27)): # ESCAPE
-		sys.exit()
-	if(key == chr(115)): # s
-		girarCenario()
-	if(key == chr(113)): # q
-		show_mouse()
-	glutPostRedisplay()
-
-# Funcao de tratamento de teclado (teclas especiais)
-def keyboard_SpecialKeys(key, x, y):
+def operacoes_teclado():
 	global posicao
 
+	# variaveis para movimentacao da camera
 	vetor_frente = [0,0,0]
 	vetor_frente[0] = tam_passo*math.cos(math.radians(angulo_visao[0]))
 	vetor_frente[1] = tam_passo*math.sin(math.radians(angulo_visao[0]))
@@ -179,14 +172,29 @@ def keyboard_SpecialKeys(key, x, y):
 	vetor_direita[0] = tam_passo*math.cos(math.radians(angulo_visao[0]-90))
 	vetor_direita[1] = tam_passo*math.sin(math.radians(angulo_visao[0]-90))
 
-	if(key == GLUT_KEY_UP):
-		posicao = soma_vetor_3d(posicao, vetor_frente)
-	if(key == GLUT_KEY_DOWN):
-		posicao = diff_vetor_3d(posicao, vetor_frente)
-	if(key == GLUT_KEY_LEFT):
+
+	if(keybuffer[27]): # ESCAPE
+		sys.exit()
+		
+	if(keybuffer[ord('q')]):
+		show_mouse()
+
+	if(keybuffer[ord('a')]):
 		posicao = diff_vetor_3d(posicao, vetor_direita)
-	if(key == GLUT_KEY_RIGHT):
+	if(keybuffer[ord('s')]):
+		posicao = diff_vetor_3d(posicao, vetor_frente)
+	if(keybuffer[ord('d')]):
 		posicao = soma_vetor_3d(posicao, vetor_direita)
+	if(keybuffer[ord('w')]):
+		posicao = soma_vetor_3d(posicao, vetor_frente)
+
+def key_pressed(key, x, y):
+	# print(ord(key))
+	keybuffer[ord(key)] = True
+	glutPostRedisplay()
+
+def key_up(key, x, y):
+	keybuffer[ord(key)] = False
 	glutPostRedisplay()
 
 def soma_vetor_3d(v1, v2):
@@ -223,8 +231,8 @@ def main():
 	glutCreateWindow('Treino camera')
 	init()
 	glutDisplayFunc(display)
-	glutKeyboardFunc(keyboard_CommomKeys)
-	glutSpecialFunc(keyboard_SpecialKeys)
+	glutKeyboardFunc(key_pressed)
+	glutKeyboardUpFunc(key_up)
 	glutMouseFunc(clique_mouse)
 	glutPassiveMotionFunc(movimentacao_mouse)
 	glutIdleFunc(display)
@@ -235,7 +243,7 @@ height = 700
 
 # variaveis utilizadas para movimentacao da camera
 spin = 0.0
-tam_passo = 0.5
+tam_passo = 0.3
 posicao = [0,0,5]
 pos_antiga = posicao
 correcao_dx = 0
@@ -244,5 +252,8 @@ angulo_visao = [90.0,90.0]
 sensibilidade_mouse = 20.0
 is_mouse_hidden = False
 primeira_interacao = False
+
+# buffer com as teclas pressionadas do teclado
+keybuffer = [False for i in range(256)]
 
 main()
