@@ -170,19 +170,30 @@ def keyboard_CommomKeys(key, x, y):
 
 # Funcao de tratamento de teclado (teclas especiais)
 def keyboard_SpecialKeys(key, x, y):
+	global posicao
+
+	vetor_frente = [0,0,0]
+	vetor_frente[0] = tam_passo*math.cos(math.radians(angulo_visao[0]))
+	vetor_frente[1] = tam_passo*math.sin(math.radians(angulo_visao[0]))
+	vetor_direita = [0,0,0]
+	vetor_direita[0] = tam_passo*math.cos(math.radians(angulo_visao[0]-90))
+	vetor_direita[1] = tam_passo*math.sin(math.radians(angulo_visao[0]-90))
+
 	if(key == GLUT_KEY_UP):
-		posicao[1] += tam_passo
-		# ponto_visao[1] += tam_passo
+		posicao = soma_vetor_3d(posicao, vetor_frente)
 	if(key == GLUT_KEY_DOWN):
-		posicao[1] -= tam_passo
-		# ponto_visao[1] -= tam_passo
+		posicao = diff_vetor_3d(posicao, vetor_frente)
 	if(key == GLUT_KEY_LEFT):
-		posicao[0] -= tam_passo
-		# ponto_visao[0] -= tam_passo
+		posicao = diff_vetor_3d(posicao, vetor_direita)
 	if(key == GLUT_KEY_RIGHT):
-		posicao[0] += tam_passo
-		# ponto_visao[0] += tam_passo
+		posicao = soma_vetor_3d(posicao, vetor_direita)
 	glutPostRedisplay()
+
+def soma_vetor_3d(v1, v2):
+	return [v1[0]+v2[0],v1[1]+v2[1],v1[2]+v2[2]]
+
+def diff_vetor_3d(v1, v2):
+	return [v1[0]-v2[0],v1[1]-v2[1],v1[2]-v2[2]]
 
 def clique_mouse(button, state, x, y):
 	global primeira_interacao
