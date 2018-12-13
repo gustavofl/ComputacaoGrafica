@@ -3,7 +3,7 @@ import OpenGL
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from OpenGL.GLUT import *
-import time, sys
+import time, sys, math
 
 def init():
 	glClearColor(0.0,0.0,0.0,0.0)
@@ -57,6 +57,8 @@ def configurar_camera():
 		100, # far clipping plane
 	)
 
+	ponto_visao = convert_esferica_r3()
+
 	# and then the model view matrix
 	glMatrixMode(GL_MODELVIEW)
 	glLoadIdentity()
@@ -65,6 +67,17 @@ def configurar_camera():
 		ponto_visao[0],ponto_visao[1],ponto_visao[2], # center-of-view
 		0,0,1, # up-vector
 	)
+
+def convert_esferica_r3():
+	x = 5 * math.sin(math.radians(angulo_visao[1])) * math.cos(math.radians(angulo_visao[0]))
+	y = 5 * math.sin(math.radians(angulo_visao[1])) * math.sin(math.radians(angulo_visao[0]))
+	z = 5 * math.cos(math.radians(angulo_visao[1]))
+
+	x += posicao[0]
+	y += posicao[1]
+	z += posicao[2]
+
+	return [x,y,z]
 
 def depth():
 	glDepthFunc(GL_LESS)
@@ -80,6 +93,51 @@ def display():
 	configurar_camera()
 	
 	glutSwapBuffers()
+
+def movimentacao_mouse(x, y):
+	global angulo_visao, pos_antiga, correcao_dy, correcao_dx
+
+	if(is_mouse_hidden):
+
+		# calcular movimentacao do mouse
+		dx = x - pos_antiga[0] + correcao_dx
+		dy = y - pos_antiga[1] + correcao_dy
+
+		# revisao da correcao
+		if(dx >= 400):
+			dx-=500
+		if(dx <= -400):
+			dx+=500
+		if(dy >= 400):
+			dy-=500
+		if(dy <= -400):
+			dy+=500
+
+		# configurando variaveis globais
+		pos_antiga = [x,y]
+		correcao_dy = 0
+		correcao_dx = 0
+
+		# alteracao do angulo da camera conforme a movimentacao do mouse
+		if(dx!=0 and dy!=0):
+			angulo_visao[0] = (angulo_visao[0]-dx/sensibilidade_mouse)%360
+			angulo_visao[1] = (angulo_visao[1]+dy/sensibilidade_mouse)%180
+
+		# verificao da necessidade do correcao
+		if(x > 600):
+			glutWarpPointer( x-500 , y )
+			correcao_dx = 500
+		elif(x<100):
+			glutWarpPointer( x+500 , y )
+			correcao_dx = -500
+		if(y > 600):
+			glutWarpPointer( x , y-500 )
+			correcao_dy = 500
+		elif(y<100):
+			glutWarpPointer( x , y+500 )
+			correcao_dy = -500
+
+	glutPostRedisplay()
 
 # NAO E O IDEAL
 def girarCenario():
@@ -99,40 +157,28 @@ def keyboard_CommomKeys(key, x, y):
 		girarCenario()
 	if(key == chr(113)): # q
 		show_mouse()
-	glutPostRedisplay();
+	glutPostRedisplay()
 
 # Funcao de tratamento de teclado (teclas especiais)
 def keyboard_SpecialKeys(key, x, y):
 	if(key == GLUT_KEY_UP):
 		posicao[1] += tam_passo
-		ponto_visao[1] += tam_passo
+		# ponto_visao[1] += tam_passo
 	if(key == GLUT_KEY_DOWN):
 		posicao[1] -= tam_passo
-		ponto_visao[1] -= tam_passo
+		# ponto_visao[1] -= tam_passo
 	if(key == GLUT_KEY_LEFT):
 		posicao[0] -= tam_passo
-		ponto_visao[0] -= tam_passo
+		# ponto_visao[0] -= tam_passo
 	if(key == GLUT_KEY_RIGHT):
 		posicao[0] += tam_passo
-		ponto_visao[0] += tam_passo
-	glutPostRedisplay();
-
-def movimentacao_mouse(x, y):
-	if(is_mouse_hidden):
-		if(x > 600):
-			glutWarpPointer( x-500 , y )
-		elif(x<100):
-			glutWarpPointer( x+500 , y )
-		if(y > 600):
-			glutWarpPointer( x , y-500 )
-		elif(y<100):
-			glutWarpPointer( x , y+500 )
-	glutPostRedisplay();
+		# ponto_visao[0] += tam_passo
+	glutPostRedisplay()
 
 def clique_mouse(button, state, x, y):
 	if(button == GLUT_LEFT_BUTTON and state == GLUT_DOWN):
 		hide_mouse()
-	glutPostRedisplay();
+	glutPostRedisplay()
 
 def hide_mouse():
 	global is_mouse_hidden
@@ -149,8 +195,8 @@ def show_mouse():
 def main():
 	glutInit(sys.argv)
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH)
-	glutInitWindowSize (700, 700); 
-	glutInitWindowPosition (100, 100);
+	glutInitWindowSize (width, height)
+	glutInitWindowPosition (100, 100)
 	glutCreateWindow('Treino camera')
 	init()
 	glutDisplayFunc(display)
@@ -161,10 +207,16 @@ def main():
 	glutIdleFunc(display)
 	glutMainLoop()
 
+width = 700
+height = 700
 spin = 0.0
 tam_passo = 0.5
 posicao = [0,0,5]
-ponto_visao = [0,5,5]
+pos_antiga = posicao
+correcao_dx = 0
+correcao_dy = 0
+angulo_visao = [90.0,90.0]
+sensibilidade_mouse = 20.0
 is_mouse_hidden = False
 
 main()
