@@ -95,9 +95,13 @@ def display():
 	glutSwapBuffers()
 
 def movimentacao_mouse(x, y):
-	global angulo_visao, pos_antiga, correcao_dy, correcao_dx
+	global angulo_visao, pos_antiga, correcao_dy, correcao_dx, primeira_interacao
 
 	if(is_mouse_hidden):
+
+		if(primeira_interacao):
+			pos_antiga = [x,y]
+			primeira_interacao = False
 
 		# calcular movimentacao do mouse
 		dx = x - pos_antiga[0] + correcao_dx
@@ -121,7 +125,12 @@ def movimentacao_mouse(x, y):
 		# alteracao do angulo da camera conforme a movimentacao do mouse
 		if(dx!=0 and dy!=0):
 			angulo_visao[0] = (angulo_visao[0]-dx/sensibilidade_mouse)%360
-			angulo_visao[1] = (angulo_visao[1]+dy/sensibilidade_mouse)%180
+			angulo_visao[1] = angulo_visao[1]+dy/sensibilidade_mouse
+
+			if(angulo_visao[1] > 170):
+				angulo_visao[1] = 170
+			if(angulo_visao[1] < 10):
+				angulo_visao[1] = 10
 
 		# verificao da necessidade do correcao
 		if(x > 600):
@@ -176,8 +185,11 @@ def keyboard_SpecialKeys(key, x, y):
 	glutPostRedisplay()
 
 def clique_mouse(button, state, x, y):
+	global primeira_interacao
+
 	if(button == GLUT_LEFT_BUTTON and state == GLUT_DOWN):
 		hide_mouse()
+		primeira_interacao = True
 	glutPostRedisplay()
 
 def hide_mouse():
@@ -209,6 +221,8 @@ def main():
 
 width = 700
 height = 700
+
+# variaveis utilizadas para movimentacao da camera
 spin = 0.0
 tam_passo = 0.5
 posicao = [0,0,5]
@@ -218,5 +232,6 @@ correcao_dy = 0
 angulo_visao = [90.0,90.0]
 sensibilidade_mouse = 20.0
 is_mouse_hidden = False
+primeira_interacao = False
 
 main()
