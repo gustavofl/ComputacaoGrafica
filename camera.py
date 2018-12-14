@@ -102,6 +102,9 @@ class Camera():
 		self.vetor_direita[1] = math.sin(math.radians(self.angulo_visao[1]-90))
 
 	def move(self, direcao, distancia):
+		# verificar a posicao se esta no limite do quadrado atual do cenario
+			# se a posicao esta no limite, nao executar o calculo com vetores
+
 		if(direcao == CAMERA_FRENTE):
 			self.posicao = soma_vetor_3d(self.posicao, escala_vetor_3d(self.vetor_frente, distancia))
 		elif(direcao == CAMERA_TRAS):
@@ -110,3 +113,6 @@ class Camera():
 			self.posicao = soma_vetor_3d(self.posicao, escala_vetor_3d(self.vetor_direita, distancia))
 		elif(direcao == CAMERA_ESQUERDA):
 			self.posicao = soma_vetor_3d(self.posicao, escala_vetor_3d(self.vetor_direita, -distancia))
+
+		# verificar a nova posicao se passou dos limites
+			# caso passe, voltar a posicao para a posicao de limite
