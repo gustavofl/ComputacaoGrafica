@@ -15,7 +15,7 @@ CAMERA_ESQUERDA = 4
 
 class Camera():
 
-	posicao = [0,0,5]
+	posicao = [20,20,5]
 	pos_antiga = posicao
 	correcao_dx = 0
 	correcao_dy = 0

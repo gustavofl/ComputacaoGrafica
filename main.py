@@ -8,45 +8,10 @@ import sys, math
 
 from camera import *
 from util import *
+from cenario_1 import *
 
 def init():
 	glClearColor(0.0,0.0,0.0,0.0)
-
-def desenharChao():
-	glPushMatrix()
-
-	glBegin(GL_POLYGON)
-	glColor3f (150.0, 0.0, 0.0)
-	glVertex3f (-25, -25, 0.0)
-	glColor3f (0.0, 150.0, 0.0)
-	glVertex3f (-25, 25, 0.0)
-	glColor3f (0.0, .0, 150.0)
-	glVertex3f (25, 25, 0.0)
-	glColor3f (150.0, 0.0, 150.0)
-	glVertex3f (25, -25, 0.0)
-	glEnd()
-	
-	glPopMatrix()
-
-def desenharParede(v1x, v1y, v2x, v2y, cor, altura=10):
-	glPushMatrix()
-
-	glBegin(GL_POLYGON)
-	glColor3f (cor[0], cor[1], cor[2])
-	glVertex3f (v1x, v1y, 0.0)
-	glVertex3f (v1x, v1y, altura)
-	glVertex3f (v2x, v2y, altura)
-	glVertex3f (v2x, v2y, 0.0)
-	glEnd()
-	
-	glPopMatrix()
-
-def desenhar_cenario():
-	desenharChao()
-	desenharParede(-25,-25,-25,25,[150,0,0])
-	desenharParede(-25,25,25,25,[0,150,0])
-	desenharParede(25,25,25,-25,[0,0,150])
-	desenharParede(25,-25,-25,-25,[150,150,0])
 
 def depth():
 	glDepthFunc(GL_LESS)
@@ -55,7 +20,7 @@ def depth():
 def display():
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
-	desenhar_cenario()
+	cenario.desenhar_cenario()
 
 	depth()
 
@@ -143,5 +108,6 @@ is_mouse_hidden = False
 keybuffer = [False for i in range(256)]
 
 camera = Camera()
+cenario = Cenario_1()
 
 main()
