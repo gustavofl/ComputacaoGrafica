@@ -148,10 +148,14 @@ class Cenario_1():
             glPushMatrix()
 
             glBegin(GL_POLYGON)
-            glColor3f (cor[0], cor[1], cor[2])
+            #glColor3f (cor[0], cor[1], cor[2])
+            glTexCoord2f(1.0, 0.0)
             glVertex3f (v1x, v1y, 0.0)
+            glTexCoord2f(1.0, 1.0)
             glVertex3f (v1x, v1y, altura)
+            glTexCoord2f(0.0, 1.0)
             glVertex3f (v2x, v2y, altura)
+            glTexCoord2f(0.0, 0.0)
             glVertex3f (v2x, v2y, 0.0)
             glEnd()
             

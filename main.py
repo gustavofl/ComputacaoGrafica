@@ -5,7 +5,10 @@ from OpenGL.GLU import *
 from OpenGL.GLUT import *
 
 import sys, math
+import pygame
+import numpy
 
+from PIL import Image
 from camera import *
 from util import *
 from cenario_1 import *
@@ -13,14 +16,66 @@ from cenario_1 import *
 def init():
 	glClearColor(0.0,0.0,0.0,0.0)
 
+'''
+def carregar_textura(filename):
+    img = Image.open(filename)
+    img_data = numpy.array(list(img.getdata()), numpy.int8)
+
+    #width = textureSurface.get_width()
+    #height = textureSurface.get_height()
+
+    glEnable(GL_TEXTURE_2D)#habilita textura 2D
+    textID = glGenTextures(1)
+
+    glBindTexture(GL_TEXTURE_2D,textID)
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1)
+
+    #glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL)
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img.size[0], img.size[1], 0, GL_RGB, GL_UNSIGNED_BYTE, img_data)    
+    
+
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
+    
+    return textID
+'''
+
+def carregar_textura(textura):
+
+        textureSurface = pygame.image.load(textura) #carrega imagem da textura
+        textureData = pygame.image.tostring(textureSurface,"RGBA",1)
+        width = textureSurface.get_width()
+        height = textureSurface.get_height()
+
+        glEnable(GL_TEXTURE_2D)#habilita textura 2D
+        texid = glGenTextures(1)#ID da textura
+
+        glBindTexture(GL_TEXTURE_2D,texid)
+        glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,textureData)
+
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
+
+
+        return texid
+
 def depth():
 	glDepthFunc(GL_LESS)
 	glEnable(GL_DEPTH_TEST)
 
 def display():
+        
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-
+	
+	textura = carregar_textura('parede.png')
+	glEnable(GL_TEXTURE_2D)
+	glBindTexture(GL_TEXTURE_2D,textura)
 	cenario.desenhar_cenario()
+	glDisable(GL_TEXTURE_2D)
 
 	depth()
 
