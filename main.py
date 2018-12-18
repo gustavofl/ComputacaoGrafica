@@ -71,7 +71,7 @@ def display():
         
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 	
-	textura = carregar_textura('parede.png')
+	textura = carregar_textura('parede_256px.png')
 	glEnable(GL_TEXTURE_2D)
 	glBindTexture(GL_TEXTURE_2D,textura)
 	cenario.desenhar_cenario()
