@@ -12,6 +12,21 @@ from util import *
 
 cenario = []
 
+import serial #novo
+import os #novo
+import threading #novo
+ 
+ESCAPE = '\033' #novo
+ 
+window = 0 #novo
+ 
+#rotation
+X_AXIS = 0.0 #novo
+Y_AXIS = 0.0 #novo
+Z_AXIS = 0.0 #novo
+ 
+DIRECTION = 1 #novo
+
 class Cenario_1():
     
     matriz_cenario = [ # Matriz correspondente ao cenario
@@ -73,7 +88,7 @@ class Cenario_1():
         #0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,], #0  - - - - - - - - - - - - - - -  
         [1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1,], #1  |         |       |          |
-        [1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1,], #2  |         |       |          |
+        [1, 0, 0, 2, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1,], #2  |         |       |          |
         [1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1,], #3  |         |       |          |
         [1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1,], #4  | - -   - |       | -    - - |
         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,], #5  |                            |
@@ -86,8 +101,69 @@ class Cenario_1():
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,]  #12 - - - - - - - - - - - - - - -  
         ]
     
+        
+    def desenhar_cubo(self): # FUNCAO PARA CRIAR O CUBO GIRANDO
+        global X_AXIS,Y_AXIS,Z_AXIS
+        global DIRECTION
+ 
+        #glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+ 
+        #glLoadIdentity()
+        glPushMatrix()
+        #glTranslatef(0.0,0.0,-6.0)
+ 
+        glRotatef(X_AXIS,1.0,0.0,0.0)
+        glRotatef(Y_AXIS,0.0,1.0,0.0)
+        glRotatef(Z_AXIS,0.0,0.0,1.0)
+ 
+        # Draw Cube (multiple quads)
+        glBegin(GL_QUADS)
+ 
+        glColor3f(0.0,1.0,0.0)
+        glVertex3f( 1.0, 1.0,-1.0)
+        glVertex3f(-1.0, 1.0,-1.0)
+        glVertex3f(-1.0, 1.0, 1.0)
+        glVertex3f( 1.0, 1.0, 1.0) 
+ 
+        glColor3f(1.0,0.0,0.0)
+        glVertex3f( 1.0,-1.0, 1.0)
+        glVertex3f(-1.0,-1.0, 1.0)
+        glVertex3f(-1.0,-1.0,-1.0)
+        glVertex3f( 1.0,-1.0,-1.0) 
+ 
+        glColor3f(0.0,1.0,0.0)
+        glVertex3f( 1.0, 1.0, 1.0)
+        glVertex3f(-1.0, 1.0, 1.0)
+        glVertex3f(-1.0,-1.0, 1.0)
+        glVertex3f( 1.0,-1.0, 1.0)
+ 
+        glColor3f(1.0,1.0,0.0)
+        glVertex3f( 1.0,-1.0,-1.0)
+        glVertex3f(-1.0,-1.0,-1.0)
+        glVertex3f(-1.0, 1.0,-1.0)
+        glVertex3f( 1.0, 1.0,-1.0)
+ 
+        glColor3f(0.0,0.0,1.0)
+        glVertex3f(-1.0, 1.0, 1.0) 
+        glVertex3f(-1.0, 1.0,-1.0)
+        glVertex3f(-1.0,-1.0,-1.0) 
+        glVertex3f(-1.0,-1.0, 1.0) 
+ 
+        glColor3f(1.0,0.0,1.0)
+        glVertex3f( 1.0, 1.0,-1.0) 
+        glVertex3f( 1.0, 1.0, 1.0)
+        glVertex3f( 1.0,-1.0, 1.0)
+        glVertex3f( 1.0,-1.0,-1.0)
 
-
+        glEnd()
+        glPopMatrix()
+ 
+ 
+        X_AXIS = X_AXIS - 0.30
+        Z_AXIS = Z_AXIS - 0.30
+ 
+        #glutSwapBuffers()
+        
     def desenhar_cenario(self): # Funcao para ler a matriz e desenhar o cenario
 
         indx = 0 # Recebera o valor da posicao da coluna para calcular o valor em pixel
@@ -121,6 +197,7 @@ class Cenario_1():
 
                 # Desenha o chao onde for '0' na matriz
                 if self.matriz_cenario[y][x] == 0:
+                    
                     glPushMatrix()
 
                     glBegin(GL_POLYGON)
@@ -136,15 +213,21 @@ class Cenario_1():
             
                     glPopMatrix()
 
-                # Desenha a parede onde for '1' na matriz
+                # Desenha a parede onde for '1' na matriz                
                 elif self.matriz_cenario[y][x] == 1:
-                    self.desenharParede(10*x + (-5), 10*y + (-5),10*x + (-5), 10*y + 5,[150,0,0])
+                    
+                    self.desenharParede(10*x + (-5), 10*y + (-5),10*x + (-5), 10*y + 5,[150,0,0]) #perede esquerda do cubo
                     self.desenharParede(10*x + (-5), 10*y + 5,10*x + 5, 10*y + 5,[0,150,0])
                     self.desenharParede(10*x + 5, 10*y + 5, 10*x + 5, 10*y + (-5),[0,0,150])
                     self.desenharParede(10*x + 5, 10*y + (-5), 10*x + (-5), 10*y + (-5),[150,150,0])
-
+                
+                elif self.matriz_cenario[y][x] == 2: # CONDICAO PARA O CUBO GIRANDO SER CRIADO
+                    self.desenhar_cubo()
+                    
+                
     # Desenha uma parede
     def desenharParede(self, v1x, v1y, v2x, v2y, cor, altura=10):
+        
             glPushMatrix()
 
             glBegin(GL_POLYGON)
@@ -160,4 +243,3 @@ class Cenario_1():
             glEnd()
             
             glPopMatrix()
-

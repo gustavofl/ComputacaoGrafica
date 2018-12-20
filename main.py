@@ -55,7 +55,7 @@ def carregar_textura(textura):
         glBindTexture(GL_TEXTURE_2D,texid)
         glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,textureData)
 
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT) 
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
@@ -75,6 +75,7 @@ def display():
 	glEnable(GL_TEXTURE_2D)
 	glBindTexture(GL_TEXTURE_2D,textura)
 	cenario.desenhar_cenario()
+	
 	glDisable(GL_TEXTURE_2D)
 
 	depth()
@@ -152,7 +153,7 @@ def main():
 	glutPassiveMotionFunc(movimentacao_mouse)
 	glutIdleFunc(display)
 	glutMainLoop()
-
+        
 width = 700
 height = 700
 
