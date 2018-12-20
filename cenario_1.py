@@ -12,20 +12,13 @@ from util import *
 
 cenario = []
 
-import serial #novo
-import os #novo
-import threading #novo
  
-ESCAPE = '\033' #novo
+#rotacao
+X_AXIS = 0.0 
+Y_AXIS = 0.0
+Z_AXIS = 0.0
  
-window = 0 #novo
- 
-#rotation
-X_AXIS = 0.0 #novo
-Y_AXIS = 0.0 #novo
-Z_AXIS = 0.0 #novo
- 
-DIRECTION = 1 #novo
+DIRECTION = 1
 
 class Cenario_1():
     
@@ -106,9 +99,6 @@ class Cenario_1():
         global X_AXIS,Y_AXIS,Z_AXIS
         global DIRECTION
  
-        #glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
- 
-        #glLoadIdentity()
         glPushMatrix()
         glTranslatef(pos_x,pos_y,pos_z) # MOVIMENTA O BLOCO NOS EIXOS X Y e Z
  
@@ -116,7 +106,6 @@ class Cenario_1():
         glRotatef(Y_AXIS,0.0,1.0,0.0)
         glRotatef(Z_AXIS,0.0,0.0,1.0)
  
-        # Draw Cube (multiple quads)
         glBegin(GL_QUADS)
  
         glColor3f(0.0,1.0,0.0)
@@ -162,7 +151,6 @@ class Cenario_1():
         X_AXIS = X_AXIS - 0.30
         Z_AXIS = Z_AXIS - 0.30
  
-        #glutSwapBuffers()
         
     def desenhar_cenario(self): # Funcao para ler a matriz e desenhar o cenario
 
