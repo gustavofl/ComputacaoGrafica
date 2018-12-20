@@ -86,13 +86,13 @@ class Cenario_1():
         # Matriz principal para o cenario_1
 
         #0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14
-        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,], #0  - - - - - - - - - - - - - - -  
+        [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,], #0  - - - - - - - - - - - - - - -  
         [1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1,], #1  |         |       |          |
-        [1, 0, 0, 2, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1,], #2  |         |       |          |
+        [1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1,], #2  |         |       |          |
         [1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1,], #3  |         |       |          |
         [1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1,], #4  | - -   - |       | -    - - |
         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,], #5  |                            |
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,], #6  |                            |
+        [1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 1,], #6  |                            |
         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,], #7  |                            |
         [1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1,], #8  | - -   - |       | -    - - |
         [1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1,], #9  |         |       |          |
@@ -102,7 +102,7 @@ class Cenario_1():
         ]
     
         
-    def desenhar_cubo(self): # FUNCAO PARA CRIAR O CUBO GIRANDO
+    def desenhar_cubo(self, pos_x,pos_y,pos_z): # FUNCAO PARA CRIAR O CUBO GIRANDO
         global X_AXIS,Y_AXIS,Z_AXIS
         global DIRECTION
  
@@ -110,7 +110,7 @@ class Cenario_1():
  
         #glLoadIdentity()
         glPushMatrix()
-        #glTranslatef(0.0,0.0,-6.0)
+        glTranslatef(pos_x,pos_y,pos_z) # MOVIMENTA O BLOCO NOS EIXOS X Y e Z
  
         glRotatef(X_AXIS,1.0,0.0,0.0)
         glRotatef(Y_AXIS,0.0,1.0,0.0)
@@ -120,40 +120,40 @@ class Cenario_1():
         glBegin(GL_QUADS)
  
         glColor3f(0.0,1.0,0.0)
-        glVertex3f( 1.0, 1.0,-1.0)
-        glVertex3f(-1.0, 1.0,-1.0)
-        glVertex3f(-1.0, 1.0, 1.0)
-        glVertex3f( 1.0, 1.0, 1.0) 
+        glVertex3f( 2.1, 2.1,-2.1)
+        glVertex3f(-2.1, 2.1,-2.1)
+        glVertex3f(-2.1, 2.1, 2.1)
+        glVertex3f( 2.1, 2.1, 2.1) 
  
         glColor3f(1.0,0.0,0.0)
-        glVertex3f( 1.0,-1.0, 1.0)
-        glVertex3f(-1.0,-1.0, 1.0)
-        glVertex3f(-1.0,-1.0,-1.0)
-        glVertex3f( 1.0,-1.0,-1.0) 
+        glVertex3f( 2.1,-2.1, 2.1)
+        glVertex3f(-2.1,-2.1, 2.1)
+        glVertex3f(-2.1,-2.1,-2.1)
+        glVertex3f( 2.1,-2.1,-2.1) 
  
         glColor3f(0.0,1.0,0.0)
-        glVertex3f( 1.0, 1.0, 1.0)
-        glVertex3f(-1.0, 1.0, 1.0)
-        glVertex3f(-1.0,-1.0, 1.0)
-        glVertex3f( 1.0,-1.0, 1.0)
+        glVertex3f( 2.1, 2.1, 2.1)
+        glVertex3f(-2.1, 2.1, 2.1)
+        glVertex3f(-2.1,-2.1, 2.1)
+        glVertex3f( 2.1,-2.1, 2.1)
  
         glColor3f(1.0,1.0,0.0)
-        glVertex3f( 1.0,-1.0,-1.0)
-        glVertex3f(-1.0,-1.0,-1.0)
-        glVertex3f(-1.0, 1.0,-1.0)
-        glVertex3f( 1.0, 1.0,-1.0)
+        glVertex3f( 2.1,-2.1,-2.1)
+        glVertex3f(-2.1,-2.1,-2.1)
+        glVertex3f(-2.1, 2.1,-2.1)
+        glVertex3f( 2.1, 2.1,-2.1)
  
         glColor3f(0.0,0.0,1.0)
-        glVertex3f(-1.0, 1.0, 1.0) 
-        glVertex3f(-1.0, 1.0,-1.0)
-        glVertex3f(-1.0,-1.0,-1.0) 
-        glVertex3f(-1.0,-1.0, 1.0) 
+        glVertex3f(-2.1, 2.1, 2.1) 
+        glVertex3f(-2.1, 2.1,-2.1)
+        glVertex3f(-2.1,-2.1,-2.1) 
+        glVertex3f(-2.1,-2.1, 2.1) 
  
         glColor3f(1.0,0.0,1.0)
-        glVertex3f( 1.0, 1.0,-1.0) 
-        glVertex3f( 1.0, 1.0, 1.0)
-        glVertex3f( 1.0,-1.0, 1.0)
-        glVertex3f( 1.0,-1.0,-1.0)
+        glVertex3f( 2.1, 2.1,-2.1) 
+        glVertex3f( 2.1, 2.1, 2.1)
+        glVertex3f( 2.1,-2.1, 2.1)
+        glVertex3f( 2.1,-2.1,-2.1)
 
         glEnd()
         glPopMatrix()
@@ -222,7 +222,10 @@ class Cenario_1():
                     self.desenharParede(10*x + 5, 10*y + (-5), 10*x + (-5), 10*y + (-5),[150,150,0])
                 
                 elif self.matriz_cenario[y][x] == 2: # CONDICAO PARA O CUBO GIRANDO SER CRIADO
-                    self.desenhar_cubo()
+                    self.desenhar_cubo(30.0,20.0,4.0)
+                    self.desenhar_cubo(110.0,100.0,4.0)
+                    self.desenhar_cubo(110.0,20.0,4.0)
+                    self.desenhar_cubo(30.0,100.0,4.0)
                     
                 
     # Desenha uma parede
