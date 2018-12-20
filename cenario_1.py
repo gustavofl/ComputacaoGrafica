@@ -25,8 +25,11 @@ class Cenario_1():
     matriz_cenario = [ # Matriz correspondente ao cenario
         
         # A primeira linha representa as posições na matriz
-        # 1 = Paredes, onde for o numero '1' sera colocado uma parede no cenario
         # 0 = chao, onde for o numero '0' sera colocado o piso no cenario
+        # 1 = Paredes, onde for o numero '1' sera colocado uma parede no cenario
+        # 2 = Cubo, onde for o numero '2' sera colocado um cubo no cenario
+        # 3 = Esfera, onde for o numero '3' sera colocado uma esfera no cenario
+
 
         # Matriz para teste
 ##        #0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59
@@ -81,15 +84,15 @@ class Cenario_1():
         #0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14
         [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,], #0  - - - - - - - - - - - - - - -  
         [1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1,], #1  |         |       |          |
-        [1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1,], #2  |         |       |          |
+        [1, 0, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 0, 1,], #2  |     c   |   e   |   c      |
         [1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1,], #3  |         |       |          |
         [1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1,], #4  | - -   - |       | -    - - |
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,], #5  |                            |
-        [1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 1,], #6  |                            |
-        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,], #7  |                            |
+        [1, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 1,], #5  |                            |
+        [1, 0, 3, 0, 0, 0, 0, 3, 0, 0, 0, 0, 3, 0, 1,], #6  |  e          e           e  |
+        [1, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 1,], #7  |                            |
         [1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1,], #8  | - -   - |       | -    - - |
         [1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1,], #9  |         |       |          |
-        [1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1,], #10 |         |       |          |
+        [1, 0, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 0, 1,], #10 |     c   |   e   |   c      |
         [1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1,], #11 |         |       |          |
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,]  #12 - - - - - - - - - - - - - - -  
         ]
@@ -150,7 +153,58 @@ class Cenario_1():
  
         X_AXIS = X_AXIS - 0.30
         Z_AXIS = Z_AXIS - 0.30
- 
+
+    def desenhar_esfera(self, pos_x, pos_y):
+        glColor3f(1.0, 0.0, 0.0)
+        glTranslatef(pos_x * 10, pos_y * 10, 4)
+        glutSolidSphere(3, 20, 20)
+        glTranslatef(-(pos_x * 10), -(pos_y * 10), -4)
+
+    def desenhar_piramide(self, pos_x, pos_y, pos_z):  # FUNCAO PARA CRIAR O CUBO GIRANDO
+        global X_AXIS, Y_AXIS, Z_AXIS
+        global DIRECTION
+
+        glPushMatrix()
+        glTranslatef(pos_x, pos_y, pos_z)  # MOVIMENTA O BLOCO NOS EIXOS X Y e Z
+
+        glRotatef(X_AXIS, 1.0, 0.0, 0.0)
+        glRotatef(Y_AXIS, 0.0, 1.0, 0.0)
+        glRotatef(Z_AXIS, 0.0, 0.0, 1.0)
+
+        glBegin(GL_TRIANGLES)
+        glColor3f(2.1, 0.0, 0.0)
+        glVertex3f(0.0, 2.1, 0.0)
+        glColor3f(0.0, 2.1, 0.0)
+        glVertex3f(-2.1, -2.1, 2.1)
+        glColor3f(0.0, 0.0, 2.1)
+        glVertex3f(2.1, -2.1, 2.1)
+
+        glColor3f(2.1, 0.0, 0.0)
+        glVertex3f(0.0, 2.1, 0.0)
+        glColor3f(0.0, 2.1, 0.0)
+        glVertex3f(-2.1, -2.1, 2.1)
+        glColor3f(0.0, 0.0, 2.1)
+        glVertex3f(0.0, -2.1, -2.1)
+
+        glColor3f(2.1, 0.0, 0.0)
+        glVertex3f(0.0, 2.1, 0.0)
+        glColor3f(0.0, 2.1, 0.0)
+        glVertex3f(0.0, -2.1, -2.1)
+        glColor3f(0.0, 0.0, 2.1)
+        glVertex3f(2.1, -2.1, 2.1)
+
+        glColor3f(2.1, 0.0, 0.0)
+        glVertex3f(-2.1, -2.1, 2.1)
+        glColor3f(0.0, 2.1, 0.0)
+        glVertex3f(0.0, -2.1, -2.1)
+        glColor3f(0.0, 0.0, 2.1)
+        glVertex3f(2.1, -2.1, 2.1)
+
+        glEnd()
+        glPopMatrix()
+
+        X_AXIS = X_AXIS - 0.30
+        Z_AXIS = Z_AXIS - 0.30
         
     def desenhar_cenario(self): # Funcao para ler a matriz e desenhar o cenario
 
@@ -185,21 +239,7 @@ class Cenario_1():
 
                 # Desenha o chao onde for '0' na matriz
                 if self.matriz_cenario[y][x] == 0:
-                    
-                    glPushMatrix()
-
-                    glBegin(GL_POLYGON)
-                    glColor3f (cor, cor, cor)
-                    glVertex3f (10*x + (-5), 10*y + (-5), 0.0)
-                    glColor3f (cor, cor, cor)
-                    glVertex3f (10*x + (-5), 10*y + 5, 0.0)
-                    glColor3f (cor, cor, cor)
-                    glVertex3f (10*x + 5, 10*y + 5, 0.0)
-                    glColor3f (cor, cor, cor)
-                    glVertex3f (10*x +5, 10*y + (-5), 0.0)
-                    glEnd()
-            
-                    glPopMatrix()
+                    self.desenhar_piso(cor, x, y)
 
                 # Desenha a parede onde for '1' na matriz                
                 elif self.matriz_cenario[y][x] == 1:
@@ -210,12 +250,36 @@ class Cenario_1():
                     self.desenharParede(10*x + 5, 10*y + (-5), 10*x + (-5), 10*y + (-5),[150,150,0])
                 
                 elif self.matriz_cenario[y][x] == 2: # CONDICAO PARA O CUBO GIRANDO SER CRIADO
-                    self.desenhar_cubo(30.0,20.0,4.0)
-                    self.desenhar_cubo(110.0,100.0,4.0)
-                    self.desenhar_cubo(110.0,20.0,4.0)
-                    self.desenhar_cubo(30.0,100.0,4.0)
+                    self.desenhar_piso(cor, x, y)
+                    self.desenhar_cubo(indx*10,indy*10,4.0)
+
+                elif self.matriz_cenario[y][x] == 3:
+                    self.desenhar_piso(cor, x, y)
+                    self.desenhar_esfera(x, y)
+
+                elif self.matriz_cenario[y][x] == 4:
+                    self.desenhar_piso(cor, x, y)
+                    self.desenhar_piramide(indx*10,indy*10,4.0)
+
                     
-                
+
+    def desenhar_piso(self, cor, x, y):
+            glPushMatrix()
+
+            glBegin(GL_POLYGON)
+            glColor3f(cor, cor, cor)
+            glVertex3f(10 * x + (-5), 10 * y + (-5), 0.0)
+            glColor3f(cor, cor, cor)
+            glVertex3f(10 * x + (-5), 10 * y + 5, 0.0)
+            glColor3f(cor, cor, cor)
+            glVertex3f(10 * x + 5, 10 * y + 5, 0.0)
+            glColor3f(cor, cor, cor)
+            glVertex3f(10 * x + 5, 10 * y + (-5), 0.0)
+            glEnd()
+
+            glPopMatrix()
+
+
     # Desenha uma parede
     def desenharParede(self, v1x, v1y, v2x, v2y, cor, altura=10):
         

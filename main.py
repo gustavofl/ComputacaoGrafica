@@ -144,7 +144,7 @@ def main():
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH)
 	glutInitWindowSize (width, height)
 	glutInitWindowPosition (100, 100)
-	glutCreateWindow('Treino camera')
+	glutCreateWindow('Computacao Grafica 2018.2')
 	init()
 	glutDisplayFunc(display)
 	glutKeyboardFunc(key_pressed)
