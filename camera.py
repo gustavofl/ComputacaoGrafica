@@ -19,7 +19,7 @@ class Camera():
 	pos_antiga = posicao
 	correcao_dx = 0
 	correcao_dy = 0
-	angulo_visao = [5,90.0,90.0]
+	angulo_visao = [5,0.0,90.0]
 	sensibilidade_mouse = 20.0
 	primeira_interacao = False
 	vetor_frente = [0,0,0]
@@ -32,8 +32,8 @@ class Camera():
 		gluPerspective(
 			75, # field of view in degrees
 			width/float(height or 1), # aspect ratio
-			0.5, # near clipping plane
-			100, # far clipping plane
+			0.1, # near clipping plane
+			150, # far clipping plane
 		)
 
 		ponto_visao = converter_esferica_r3(self.angulo_visao, self.posicao)
@@ -110,3 +110,23 @@ class Camera():
 			self.posicao = soma_vetor_3d(self.posicao, escala_vetor_3d(self.vetor_direita, distancia))
 		elif(direcao == CAMERA_ESQUERDA):
 			self.posicao = soma_vetor_3d(self.posicao, escala_vetor_3d(self.vetor_direita, -distancia))
+
+		self.verificar_teleporte()
+
+	def verificar_teleporte(self):
+		teleporte = False
+		if(self.posicao[0] > 25 and self.posicao[0] < 35 and self.posicao[1] > 15 and self.posicao[1] < 25):
+			teleporte = True
+		elif(self.posicao[0] > 25 and self.posicao[0] < 35 and self.posicao[1] > 95 and self.posicao[1] < 105):
+			teleporte = True
+		elif(self.posicao[0] > 105 and self.posicao[0] < 115 and self.posicao[1] > 15 and self.posicao[1] < 25):
+			teleporte = True
+		elif(self.posicao[0] > 105 and self.posicao[0] < 115 and self.posicao[1] > 95 and self.posicao[1] < 105):
+			teleporte = True
+
+		if(teleporte):
+			self.posicao[0] = 30
+			self.posicao[1] = 60
+			self.angulo_visao[1] = 5.0
+			self.angulo_visao[2] = 90.0
+			teleporte = False
