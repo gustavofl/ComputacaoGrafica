@@ -151,6 +151,21 @@ def main():
 	glutMouseFunc(clique_mouse)
 	glutPassiveMotionFunc(movimentacao_mouse)
 	glutIdleFunc(display)
+
+	# Configurando os parametros para as fontes de luz
+	#  GL_DIFFUSE define o parametro usado a luz difusa (no formato RGBA)
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, [1., 1., 1., 1.])
+
+	# Os tres parametros definem a posicao da fonte luminosa
+	#  O quarto define se a fonte eh direcional (0) ou posicional (1)
+	glLightfv(GL_LIGHT0, GL_POSITION, [-5., 5., -5., 1.])
+
+	# Aplica os parametros de iluminacao
+	glEnable(GL_LIGHTING)
+
+	# Inclui a fonte de luz 0 no calculo da iluminacao
+	glEnable(GL_LIGHT0)
+
 	glutMainLoop()
 
 width = 700
